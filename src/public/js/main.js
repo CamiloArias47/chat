@@ -14,6 +14,11 @@ $(function(){
 
     const $usernames = $("#usernames");
 
+    //functions
+    function displayMsgs(data){
+        $chat.append(`<b>${data.nick}<b/>:${data.msg} </br>`)
+    }
+
     //eventos
 
     $nickForm.submit( e =>{
@@ -42,7 +47,7 @@ $(function(){
     });
 
     socket.on('new message', data =>{
-    $chat.append(`<b>${data.nick}<b/>:${data.msg} </br>`)
+        displayMsgs(data)
     })
 
     socket.on('usernames', data=>{
@@ -54,6 +59,12 @@ $(function(){
     })
 
     socket.on('whisper', data =>{
-        $chat.append(`<p class="whisper"><b>${data.nick}: ${data.msg}</b>`)
+        displayMsgs(data)
+    })
+
+    socket.on('load old msgs', msgs =>{
+        msgs.forEach(msg =>{
+            displayMsgs(msg)
+        })
     })
 })
